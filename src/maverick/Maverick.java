@@ -44,7 +44,6 @@ public class Maverick extends Canvas implements Runnable {
 
     //Images
     static Image[] planeSprites;
-    static BufferedImage[] planeSpritesBuf;
     static int planeSpriteNum = 25;
 
     static void setup() {
@@ -65,11 +64,9 @@ public class Maverick extends Canvas implements Runnable {
 
         //Creating images
         planeSprites = new Image[planeSpriteNum];
-        planeSpritesBuf = new BufferedImage[planeSpriteNum];
         for (int i = 0; i < planeSpriteNum; i++) {
             try {
                 planeSprites[i] = ImageIO.read(new File(System.getProperty("user.dir") + "/res/red_baron/red_baron" + i + ".png"));
-                planeSpritesBuf[i] = toBufferedImage(planeSprites[i]);
             } catch (IOException e) {
                 e.printStackTrace();
             }

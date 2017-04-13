@@ -11,7 +11,6 @@ import static maverick.Maverick.*;
 public class Plane extends Entity {
 
     Image sprite;
-    BufferedImage spriteBuf;
 
     double curAngle = Math.PI;
     double angle = 0;
@@ -148,7 +147,6 @@ public class Plane extends Entity {
     //Getters and Setters
     public void setSprite(Image img) {
         sprite = img.getScaledInstance(-1, SCL * 75 / 4, Image.SCALE_REPLICATE);
-        spriteBuf = toBufferedImage(sprite);
     }
 
     //Physics
