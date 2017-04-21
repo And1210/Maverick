@@ -9,12 +9,12 @@ public class Player extends Plane {
 
     KeyboardHandler keyHandler;
 
-    public Player(int x, int y, int velX, int velY, int r, Color c, KeyboardHandler keyHandler_) { 
+    public Player(int x, int y, int velX, int velY, int r, Color c, KeyboardHandler keyHandler_) {
         super(x, y, velX, velY, r, c);
 
         keyHandler = keyHandler_;
     }
-    
+
     public void update() {
         //Movement checks
         movementChecks();
@@ -23,7 +23,7 @@ public class Player extends Plane {
         pos.y += vel.y;
         vel.add(acc);
         acc.mult(0);
-        
+
         applyInput();
 
         updateAngle();
@@ -45,10 +45,10 @@ public class Player extends Plane {
         }
 
         //Lift
-        applyForce(force(0, -appliedForce * Math.abs(Math.cos(angle)))); 
+        applyForce(force(0, -appliedForce * Math.abs(Math.cos(angle))));
 
         constrain(0, 0, width(), height());
-        
+
         //End of update to-dos
         updateCount++;
         thrusting = false;
@@ -71,6 +71,10 @@ public class Player extends Plane {
         if (keyHandler.isPressed('D')) {
             applyForce(force(appliedForce, 0));
             thrusting = true;
+        }
+        
+        if (keyHandler.isPressed(' ')) {
+            shoot();
         }
     }
 

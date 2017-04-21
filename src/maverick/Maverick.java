@@ -27,6 +27,7 @@ public class Maverick extends Canvas implements Runnable {
 
     //A list of all physics entities
     static ArrayList<Entity> entities;
+    static ArrayList<Bullet> bullets;
     
     //Physics
     static Vector GRAVITY;
@@ -45,6 +46,7 @@ public class Maverick extends Canvas implements Runnable {
     //Images
     static Image[] planeSprites;
     static int planeSpriteNum = 25;
+    static Image[] bulletSprites;
 
     static void setup() {
         scl(4);
@@ -57,12 +59,14 @@ public class Maverick extends Canvas implements Runnable {
         
         appliedForce = SCL * SCL * 0.001 / 8.0;
         entities = new ArrayList<>();
+        bullets = new ArrayList<>();
         GRAVITY = new Vector(0, appliedForce);
 
         p = new Player(width() / 2, height() / 2, 0, 0, 10, new Color(0, 255, 0), keyHandler);
         p.applyForce(force(p.terminalVelocity, 0.000001));
 
         //Creating images
+        bulletSprites = new Image[3];
         planeSprites = new Image[planeSpriteNum];
         for (int i = 0; i < planeSpriteNum; i++) {
             try {
@@ -93,6 +97,12 @@ public class Maverick extends Canvas implements Runnable {
         }
         posUpdate = 0;
 
+        //Bullets
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).update();
+            bullets.get(i).render();
+        }
+        
         //Gravity
         for (int i = 0; i < entities.size(); i++) {
             entities.get(i).applyForce(GRAVITY);

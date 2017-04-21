@@ -85,7 +85,6 @@ public class Plane extends Entity {
 //                AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
 //                g2D.drawImage(op.filter(spriteBuf, null), getX() - spriteBuf.getWidth(null) / 2, getY() - spriteBuf.getHeight(null) / 2, null);
 
-                double t1 = System.nanoTime();
                 AffineTransform old = g2D.getTransform();
                 g2D.translate(pos.x - sprite.getWidth(null)/2, pos.y - sprite.getHeight(null)/2);
                 g2D.rotate(curAngle, sprite.getWidth(null)/2, sprite.getHeight(null)/2);
@@ -176,5 +175,10 @@ public class Plane extends Entity {
         }
 
         return out;
+    }
+    
+    //Attacking
+    public void shoot() {
+        bullets.add(new Bullet(pos.copy(), vel.multCopy(2), 0));
     }
 }
