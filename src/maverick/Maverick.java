@@ -86,10 +86,18 @@ public class Maverick extends Canvas implements Runnable {
         background(51);
         bg.render();
         
+        //Bullet rendering
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).render();
+        }
+        
+        //Player update and render
         p.update();
         p.render();
 
+        //Enemy update and render
         for (int i = 0; i < enemyNum; i++) {
+            //Current AI
             enemies[i].applyForce(force((Math.random() - 0.5) * appliedForce, (Math.random() - 0.5) * appliedForce));
             
             enemies[i].update();
@@ -97,10 +105,13 @@ public class Maverick extends Canvas implements Runnable {
         }
         posUpdate = 0;
 
-        //Bullets
-        for (int i = 0; i < bullets.size(); i++) {
+        //Bullet update
+        for (int i = bullets.size() - 1; i >= 0; i--) {
             bullets.get(i).update();
-            bullets.get(i).render();
+            
+            if (bullets.get(i).destroyed) {
+                bullets.remove(i);
+            }
         }
         
         //Gravity

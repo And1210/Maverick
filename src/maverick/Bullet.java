@@ -9,10 +9,12 @@ public class Bullet {
 
     Vector pos;
     Vector vel;
+    
+    boolean destroyed = false;
 
     Image sprite;
 
-    int type = 0; //3 total: 0 = cannon, 1 = RPG, 2 = laser
+    int type = 0; //3 total: 0 = Cannon, 1 = Laser, 2 = RPG
 
     double angle = 0;
 
@@ -29,6 +31,10 @@ public class Bullet {
         pos.add(vel);
 
         updateAngle();
+        
+        if (pos.x < bg.pos.x || pos.x > bg.pos.x + bg.width || pos.y < bg.pos.y || pos.y > bg.pos.y + bg.height) { //If it's outside of the playable area
+            destroy();
+        }
     }
 
     public void render() {
@@ -38,7 +44,10 @@ public class Bullet {
             g2D.rotate(angle, sprite.getWidth(null) / 2, sprite.getHeight(null) / 2);
             g2D.drawImage(sprite, 0, 0, null);
             g2D.setTransform(old);
-        } 
+        } else {
+            g.setColor(Color.white);
+            g.fillOval((int)pos.x - 3 * (type + 1), (int)pos.y - 3 * (type + 1), 6 * (type + 1), 6 * (type + 1));
+        }
     }
 
     public void updateAngle() {
@@ -55,4 +64,7 @@ public class Bullet {
         }
     }
 
+    public void destroy() {
+        destroyed = true;
+    }
 }

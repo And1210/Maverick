@@ -72,9 +72,12 @@ public class Player extends Plane {
             applyForce(force(appliedForce, 0));
             thrusting = true;
         }
-        
+
         if (keyHandler.isPressed(' ')) {
-            shoot();
+            if (System.nanoTime() - shotCooldown > fireRate * 1000000) {
+                shoot();
+                shotCooldown = System.nanoTime();
+            }
         }
     }
 

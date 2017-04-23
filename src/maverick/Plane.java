@@ -20,6 +20,9 @@ public class Plane extends Entity {
 
     int updateCount = 0;
     int curSprite = 0;
+    
+    double shotCooldown = 0;
+    int fireRate = 100;
 
     boolean thrusting = false;
 
