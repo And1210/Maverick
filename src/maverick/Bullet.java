@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import static maverick.Maverick.*;
 
-public class Bullet {
+public class Bullet { //NEEDS A HITBOX
 
     Vector pos;
     Vector vel;

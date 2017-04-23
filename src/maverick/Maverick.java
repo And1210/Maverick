@@ -28,7 +28,7 @@ public class Maverick extends Canvas implements Runnable {
     //A list of all physics entities
     static ArrayList<Entity> entities;
     static ArrayList<Bullet> bullets;
-    
+
     //Physics
     static Vector GRAVITY;
     static double appliedForce;
@@ -39,14 +39,16 @@ public class Maverick extends Canvas implements Runnable {
     static Player p;
 
     //Enemies
-    static Plane[] enemies;
-    static int enemyNum = 0;
+    static ArrayList<Plane> enemies;
     static double posUpdate;
 
     //Images
     static Image[] planeSprites;
     static int planeSpriteNum = 25;
     static Image[] bulletSprites;
+
+    //Menus
+    static boolean inMenus = true;
 
     static void setup() {
         scl(4);
@@ -56,7 +58,7 @@ public class Maverick extends Canvas implements Runnable {
         bg = new Background(0, 0, 1);
 
         FORCE = new Vector(0, 0);
-        
+
         appliedForce = SCL * SCL * 0.001 / 8.0;
         entities = new ArrayList<>();
         bullets = new ArrayList<>();
@@ -77,46 +79,55 @@ public class Maverick extends Canvas implements Runnable {
         }
         p.setSprite(planeSprites[12]);
 
-        enemies = new Plane[100];
+        enemies = new ArrayList<>();
         posUpdate = 0;
         addEnemies(2);
     }
 
     static void draw() {
-        background(51);
-        bg.render();
-        
-        //Bullet rendering
-        for (int i = 0; i < bullets.size(); i++) {
-            bullets.get(i).render();
-        }
-        
-        //Player update and render
-        p.update();
-        p.render();
+        if (inMenus) {
 
-        //Enemy update and render
-        for (int i = 0; i < enemyNum; i++) {
-            //Current AI
-            enemies[i].applyForce(force((Math.random() - 0.5) * appliedForce, (Math.random() - 0.5) * appliedForce));
-            
-            enemies[i].update();
-            enemies[i].render();
-        }
-        posUpdate = 0;
+        } else {
+            background(51);
+            bg.render();
 
-        //Bullet update
-        for (int i = bullets.size() - 1; i >= 0; i--) {
-            bullets.get(i).update();
-            
-            if (bullets.get(i).destroyed) {
-                bullets.remove(i);
+            //Bullet rendering
+            for (int i = 0; i < bullets.size(); i++) {
+                bullets.get(i).render();
             }
-        }
-        
-        //Gravity
-        for (int i = 0; i < entities.size(); i++) {
-            entities.get(i).applyForce(GRAVITY);
+
+            //Player update and render
+            p.update();
+            p.render();
+
+            //Enemy update and render
+            for (int i = enemies.size() - 1; i >= 0; i--) {
+                //Current AI
+                enemies.get(i).applyForce(force((Math.random() - 0.5) * appliedForce, (Math.random() - 0.5) * appliedForce));
+//            enemies[i].applyForce(force(enemies[i].appliedForce, 0));
+
+                enemies.get(i).update();
+                enemies.get(i).render();
+
+                if (enemies.get(i).destroyed) {
+                    enemies.remove(i);
+                }
+            }
+            posUpdate = 0;
+
+            //Bullet update
+            for (int i = bullets.size() - 1; i >= 0; i--) {
+                bullets.get(i).update();
+
+                if (bullets.get(i).destroyed) {
+                    bullets.remove(i);
+                }
+            }
+
+            //Gravity
+            for (int i = 0; i < entities.size(); i++) {
+                entities.get(i).applyForce(GRAVITY);
+            }
         }
     }
 //**********************************************************
@@ -182,11 +193,11 @@ public class Maverick extends Canvas implements Runnable {
     public void run() {
         while (running) {
 //            double timer = System.nanoTime();
-            
+
             render();
             draw();
             renderFinish();
-            
+
 //            System.out.println(1.0 / ((System.nanoTime() - timer) / 1000000000.0));
         }
         stop();
@@ -261,7 +272,7 @@ public class Maverick extends Canvas implements Runnable {
     public static int height() {
         return HEIGHT * SCL + 12;
     }
-    
+
     //Physics
     public static Vector force(double x, double y) {
         FORCE.x = x;
@@ -271,13 +282,11 @@ public class Maverick extends Canvas implements Runnable {
 
     //Enemy Functions
     public static void addEnemies(int toAdd) {
-        for (int i = enemyNum; i < enemyNum + toAdd; i++) {
-            enemies[i] = new Plane(width() / 2, height() / 2);
-            enemies[i].setSprite(planeSprites[12]);
-            enemies[i].applyForce(force(enemies[i].appliedForce, 0));
+        for (int i = 0; i < toAdd; i++) {
+            enemies.add(new Plane(width() / 2, height() / 2));
+            enemies.get(i).setSprite(planeSprites[12]);
+            enemies.get(i).applyForce(force(enemies.get(i).appliedForce, 0));
         }
-
-        enemyNum += toAdd;
     }
 
     //Image manipulation methods

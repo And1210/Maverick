@@ -23,12 +23,20 @@ public class Plane extends Entity {
     
     double shotCooldown = 0;
     int fireRate = 100;
+    int health = 100;
+    boolean destroyed = false;
+    Polygon hitbox;
+    int[] xpoints, ypoints;
 
     boolean thrusting = false;
 
     public Plane(int x, int y, int velX, int velY, int r, Color c) {
         super(x, y, velX, velY, r, c);
 
+        hitbox = new Polygon();
+        xpoints = new int[4];
+        ypoints = new int[4];
+        
         entities.add(this);
     }
 
@@ -73,6 +81,36 @@ public class Plane extends Entity {
 
         constrain(bg.getX(), bg.getY(), bg.getX() + bg.width, bg.getY() + bg.height);
 
+        //Hitbox updates
+        int hwidth = sprite.getWidth(null) / 2, hheight = sprite.getHeight(null) / 2;
+        xpoints[0] = (int) (pos.x - hwidth * Math.cos(curAngle + Math.PI / 9));
+        xpoints[1] = (int) (pos.x + hwidth * Math.cos(curAngle - Math.PI / 9));
+        xpoints[2] = (int) (pos.x + hwidth * Math.cos(curAngle + Math.PI / 9));
+        xpoints[3] = (int) (pos.x - hwidth * Math.cos(curAngle - Math.PI / 9));
+        ypoints[0] = (int) (pos.y - hwidth * Math.sin(curAngle + Math.PI / 9));
+        ypoints[1] = (int) (pos.y + hwidth * Math.sin(curAngle - Math.PI / 9));
+        ypoints[2] = (int) (pos.y + hwidth * Math.sin(curAngle + Math.PI / 9));
+        ypoints[3] = (int) (pos.y - hwidth * Math.sin(curAngle - Math.PI / 9));
+        for (int i = 0; i < 4; i++) {
+            hitbox.addPoint(xpoints[i], ypoints[i]);
+        }
+        g.setColor(Color.BLACK);
+        g.drawPolygon(hitbox);
+        
+        //Checking if hit
+        for (int i = 0; i < bullets.size(); i++) {
+            Bullet b = bullets.get(i);
+            if (hitbox.contains(b.pos.x, b.pos.y)) {
+                b.destroy();
+                health -= 10;
+            }
+        }
+        hitbox.reset();
+        
+        //Health check
+        if (health <= 0)
+            destroy();
+        
         //End of update to-dos
         updateCount++;
     }
@@ -183,5 +221,10 @@ public class Plane extends Entity {
     //Attacking
     public void shoot() {
         bullets.add(new Bullet(pos.copy(), vel.multCopy(2), 0));
+    }
+    
+    //Health
+    public void destroy() {
+        destroyed = true;
     }
 }
