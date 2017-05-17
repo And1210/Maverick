@@ -11,17 +11,19 @@ public class Bullet { //NEEDS A HITBOX
     Vector vel;
     
     boolean destroyed = false;
-
+    boolean tag = false; //false = player bullet, true = enemy bullet
+    
     Image sprite;
 
     int type = 0; //3 total: 0 = Cannon, 1 = Laser, 2 = RPG
 
     double angle = 0;
 
-    public Bullet(Vector position, Vector velocity, int type_) {
+    public Bullet(Vector position, Vector velocity, int type_, boolean t) {
         pos = position;
         vel = velocity;
 
+        tag = t;
         type = type_;
         sprite = bulletSprites[type];
         updateAngle();

@@ -23,9 +23,7 @@ public class Entity {
         r = (int) (SCL * r_ / 4.0);
         c = c_;
 
-        appliedForce = SCL * SCL * 0.001 / 8.0;
-        terminalVelocity = SCL * SCL / 32.0;
-        airResistanceRatio = 1 / (1000 * terminalVelocity);
+        updateConstants(1);
     }
 
     Entity(int x, int y, int r, Color c) {
@@ -76,6 +74,12 @@ public class Entity {
             pos.setY(y2 - r - 1);
             vel.y *= -1;
         }
+    }
+    
+    public void updateConstants(double n) {
+        appliedForce = SCL * SCL * 0.001 / (4.0 * n);
+        terminalVelocity = SCL * SCL / (16.0 * n);
+        airResistanceRatio = 1 / (1000 * terminalVelocity);
     }
 
     //Getters and Setters

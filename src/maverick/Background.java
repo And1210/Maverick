@@ -24,17 +24,15 @@ public class Background extends Entity {
     }
 
     void checkBackgroundNum() {
-        if (bgNum == 1 || bgNum == 0) {
-            try {
-                img = ImageIO.read(new File(System.getProperty("user.dir") + "/res/level1.jpg"));
+        try {
+            img = ImageIO.read(new File(systemPath.substring(0, systemPath.length() - 3) + "/res/level" + (bgNum + 1) + ".jpg"));
 
-                img = img.getScaledInstance(-1, height(), Image.SCALE_REPLICATE);
+            img = img.getScaledInstance(-1, height(), Image.SCALE_REPLICATE);
 
-                width = img.getWidth(null);
-                height = img.getHeight(null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            width = img.getWidth(null);
+            height = img.getHeight(null);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
